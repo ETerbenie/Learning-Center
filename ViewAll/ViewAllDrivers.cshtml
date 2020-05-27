@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Captivate.Models.DriverModel>
+
+@{
+    ViewBag.Title = "ViewAllDrivers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="view-header">View All Drivers</h4>
+
+
+<table id="myTable2" class="table">
+    <tr>
+        <th class="hover-header text-center" onclick="sortTable(0)">
+            @Html.DisplayNameFor(model => model.DriverId)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(1)">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(2)">
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(3)">
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(4)">
+            @Html.DisplayNameFor(model => model.Driver_Group_Id)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Created_Datetime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DriverId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.Email)</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DriverGroup.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created_Datetime)
+        </td>
+        <td>
+            <button class="waves-effect waves-light btn-small">@Html.ActionLink("Edit", "RedirectToEditDriver", item, new { @class = "page-nav" })</button> |
+            <button class="waves-effect waves-light btn-small">@Html.ActionLink("Delete", "DeleteDriver", new { driverId = item.Id }, new { @class = "page-nav" })</button>
+        </td>
+    </tr>
+}
+
+</table>
+
+<div>
+    <button class="waves-effect waves-light btn-small">@Html.ActionLink("Back", "RedirectToDriverTab", null, new { @class = "page-nav" })</button>
+</div>
+
+
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>

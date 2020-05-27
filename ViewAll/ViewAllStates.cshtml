@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Captivate.Interfaces.Entities.State>
+
+@{
+    ViewBag.Title = "ViewAllStates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="view-header">View All States</h3>
+
+
+<table class="table centered">
+    <tr>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td class="card">
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+    </tr>
+}
+
+</table>
+
+
+<div>
+    <button class="waves-effect waves-light btn-small">@Html.ActionLink("Back", "RedirectToCourseTab", null, new { @class = "page-nav" })</button>
+</div>

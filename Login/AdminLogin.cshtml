@@ -1,0 +1,38 @@
+﻿@model Captivate.Models.DriverModel
+
+@{
+    ViewBag.Title = "AdminLogin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Admin Login</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <section>
+            @using (Html.BeginForm("Login", "Login", new { returnUrl = PTC.AppSettings.GetStringValue("returnUrl") }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username)
+                    <br />
+                        @Html.TextBoxFor(model => model.Username)
+                    <br />
+                    <br />
+                    @Html.LabelFor(model => model.Password)
+                    <br />
+                        @Html.TextBoxFor(model => model.Password)
+                    <br />
+                </div>
+                <br />
+                <div class="form-group">
+                    <div>
+                        <input type="submit" value="Log in" class="btn btn-default" />
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
+

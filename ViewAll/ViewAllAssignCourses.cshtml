@@ -1,0 +1,170 @@
+﻿@model IEnumerable<Captivate.Models.DriverLinkCourseModel>
+
+
+<h4 class="view-header">Assignment Board</h4>
+
+@using (Html.BeginForm("SearchDriverIdOnTable", "LinkDriverCourse", FormMethod.Post))
+{
+    <p>Find Courses by Driver ID: @Html.TextBox("driverId")</p>
+    <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" class="waves-effect waves-light btn-small" value="Search" />
+    </p>
+}
+
+
+<table id="myTable2" class="table centered">
+    <tr>
+        <th class="hover-header text-center" onclick="sortTable(0)">
+            @Html.DisplayNameFor(model => model.Driver.DriverId)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(1)">
+            @Html.DisplayNameFor(model => model.Course.Title)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(2)">
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th class="hover-header text-center" onclick="sortTable(3)">
+            @Html.DisplayNameFor(model => model.Priority)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Assigned_Datetime)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Due_Date)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Required)
+            </th>*@
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Completed)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Completed_DateTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Driver.DriverId)
+            </td>
+            <td>
+                <a href="@item.Course.URL">@Html.DisplayFor(modelItem => item.Course.Title)</a>
+            </td>
+            <td>
+                @if (item.State == "Assigned")
+                {
+                    <span style="color:red"><strong>@Html.DisplayFor(modelItem => item.State)</strong></span>
+                }
+                else if (item.State == "In Progress")
+                {
+                    <span style="color:orange"><strong>@Html.DisplayFor(modelItem => item.State)</strong></span>
+                }
+                else if (item.State == "Past Due")
+                {
+                    <span style="color:grey"><strong>@Html.DisplayFor(modelItem => item.State)</strong></span>
+                }
+                else
+                {
+                    <span style="color:green"><strong>@Html.DisplayFor(modelItem => item.State)</strong></span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assigned_Datetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Due_Date)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Required)
+                </td>*@
+            <td>
+                @if (item.State == "Completed")
+                {
+                    <span style="color:green"><strong>✓</strong></span>
+                }
+                else
+                {
+                    <span style="color:red"><strong>X</strong></span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Completed_DateTime)
+            </td>
+            <td>
+                <button class="waves-effect waves-light btn-small">@Html.ActionLink("Edit", "RedirectToEditAssignedCourse", new { assignedCourse = item.Id }, new { @class = "page-nav" })</button> |
+                <button class="waves-effect waves-light btn-small">@Html.ActionLink("Delete", "DeleteAssignedCourse", new { assignmentId = item.Id }, new { @class = "page-nav" }) </button>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<div>
+    <button class="waves-effect waves-light btn-small">@Html.ActionLink("Back", "RedirectToAssignTab", null, new { @class = "page-nav" })</button>
+</div>
+
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>

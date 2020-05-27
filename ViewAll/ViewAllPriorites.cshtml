@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Captivate.Interfaces.Entities.Priority>
+
+@{
+    ViewBag.Title = "ViewAllPriorites";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="view-header">View All Priorites</h3>
+
+<table class="table">
+    <tr>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            <button class="waves-effect waves-light btn-small">@Html.ActionLink("Delete", "DeletePriority", new { id = item.Id }, new { @class = "page-nav" })</button>
+        </td>
+    </tr>
+}
+
+</table>
+
+<div>
+    <button class="waves-effect waves-light btn-small">@Html.ActionLink("Back", "RedirectToCourseTab", null, new { @class = "page-nav" })</button>
+</div>
